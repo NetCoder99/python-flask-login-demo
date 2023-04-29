@@ -1,5 +1,4 @@
-{% extends "bootstrap/base.html" %}
-{% import "bootstrap/wtf.html" as wtf %}
+{% extends "base.html" %}
 
 {% block title %}
 Login
@@ -14,12 +13,25 @@ Login
     <div class="container">
 
       <form class="form-signin" method="POST" action="/login">
+        <fieldset class="form-control">
         <h2 class="form-signin-heading">Please sign in</h2>
         {{ form.hidden_tag() }}
-        {{ wtf.form_field(form.username) }}
-        {{ wtf.form_field(form.password) }}
-        {{ wtf.form_field(form.remember) }}
-        <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+          <div class="mb-3">
+            {{ form.username.label }}</br>
+            {{ form.username(placeholder='User Id')  }}
+          </div>
+          <div class="mb-3">
+            {{ form.password.label }}</br>
+            {{ form.password(placeholder='Password')  }}
+          </div>
+          <div class="mb-3">
+            {{ form.remember.label }}
+            {{ form.remember(class="checkbox") }}
+          </div>
+          <div class="mb-3">
+            <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+          </div>
+        </fieldset>
       </form>
 
     </div> <!-- /container -->

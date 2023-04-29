@@ -1,10 +1,10 @@
 from flask import Flask, render_template, redirect, url_for
-from flask_bootstrap import Bootstrap
+#from flask_bootstrap import Bootstrap
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
 
 from models.LoginForm import LoginForm
-from models.RegisterForm import RegisterForm
+from models.SignUpForm import SignUpForm
 from setup import db
 
 app = Flask(__name__)
@@ -17,7 +17,7 @@ with app.app_context():
     db.create_all()
     db.session.commit()
 
-bootstrap = Bootstrap(app)
+#bootstrap = Bootstrap(app)
 
 login_manager = LoginManager()
 login_manager.init_app(app)
@@ -28,6 +28,8 @@ def load_user(user_id):
     return User.query.get(int(user_id))
 
 @app.route('/')
+@app.route('/home')
+@app.route('/index')
 def index():
     return render_template('index.html')
 
@@ -49,7 +51,7 @@ def login():
 
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
-    form = RegisterForm()
+    form = SignUpForm()
 
     if form.validate_on_submit():
         hashed_password = generate_password_hash(form.password.data, method='sha256')
