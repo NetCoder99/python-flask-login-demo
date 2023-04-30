@@ -1,5 +1,8 @@
 from ldap3 import Server, ALL, Connection, NTLM
 
+def CheckUserCreds(user_name, pass_word):
+    return True
+
 # server = Server('localhost:8389',  get_info=ALL)
 # conn   = Connection(server, auto_bind=True)
 # conn.bind()
