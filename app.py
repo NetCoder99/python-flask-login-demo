@@ -1,4 +1,4 @@
-from flask import Flask, render_template, redirect, url_for
+from flask import Flask, render_template, redirect, url_for, flash
 #from flask_bootstrap import Bootstrap
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
@@ -44,8 +44,8 @@ def login():
                 login_user(user, remember=form.remember.data)
                 return redirect(url_for('dashboard'))
 
-        return '<h1>Invalid username or password</h1>'
-        #return '<h1>' + form.username.data + ' ' + form.password.data + '</h1>'
+        flash("Invalid credentials.")
+        return render_template('login.html', form=form)
 
     return render_template('login.html', form=form)
 
@@ -74,6 +74,23 @@ def dashboard():
 def logout():
     logout_user()
     return redirect(url_for('index'))
+
+@app.errorhandler(404)
+def page_not_found(e):
+    return render_template("error.html",message="Page not found")
+
+@app.errorhandler(500)
+def page_not_found(e):
+    return render_template("error.html", message=str(e))
+    # try:
+    #     if e.original_exception:
+    #         original_message = str(e.original_exception)
+    #         return render_template("error.html", message=str(e), original_message=original_message)
+    #     else:
+    #         return render_template("error.html", message=str(e))
+    # except Exception as ex:
+    #     return render_template("error.html", message=str(e))
+
 
 if __name__ == '__main__':
     app.run(debug=True)
