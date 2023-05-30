@@ -5,17 +5,26 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="stylesheet" href="{{ url_for('static', filename='bootstrap-5.0.2-dist/css/bootstrap.css') }}">
-    <title>{% block title %}{% endblock %}</title>
-    {% block styles %}{% endblock %}
-  </head>
-  <body>
-    {% include 'navbar_top.html' %}
-    {% block content %}
-    {% endblock %}
 
-    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <script src="../static/jquery-3.3.1.slim.min.js"></script>
     <script src="../static/popper.min.js" ></script>
     <script src="../static/bootstrap-5.0.2-dist/js/bootstrap.min.js"></script>
+
+    <script type="text/javascript" language="javascript" src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <script type="text/javascript" language="javascript" src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" language="javascript" src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap5.min.js"></script>
+
+    <title>{% block title %}{% endblock %}</title>
+    {% block styles %}{% endblock %}
+    {% block scripts %}{% endblock %}
+  </head>
+  <body>
+    {% include 'navbar_top.html' %}
+    <main class="container mt-4">
+      {% block content %}
+      {% endblock %}
+    </main>
+
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
   </body>
 </html>

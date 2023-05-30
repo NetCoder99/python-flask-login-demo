@@ -1,7 +1,10 @@
-from flask import Blueprint, redirect, url_for, flash, render_template, request
+from flask import Blueprint, redirect, url_for, flash, render_template, request, session
 from flask_login import login_user
+from flask_session import Session
+
 from werkzeug.security import check_password_hash, generate_password_hash
 
+from auth.ldap import CheckUserCreds
 from models.LoginForm import LoginForm
 from models.SignUpForm import SignUpForm
 from models.User import User
@@ -16,22 +19,24 @@ auth_blueprint = Blueprint('auth_blueprint',
 @auth_blueprint.route('/login', methods=['GET', 'POST'])
 def login():
     form = LoginForm()
-    call_type = request.method
+    if request.method == 'GET':
+        flash("Please enter your login credentials.")
+        return render_template('login.html', form=form)
 
     user_name = form.username.data
     pass_word = form.password.data
-    if form.validate_on_submit():
-        user = User.query.filter_by(username=form.username.data).first()
-        if user:
-            if check_password_hash(user.password, form.password.data):
-                login_user(user, remember=form.remember.data)
-                return redirect(url_for('dashboard'))
-
+    if not form.validate_on_submit():
         flash("Invalid credentials.")
         return render_template('login.html', form=form)
 
-    return render_template('login.html', form=form)
+    valid, session_user = CheckUserCreds(user_name, pass_word)
+    if not valid:
+        flash("Invalid credentials.")
+        return render_template('login.html', form=form)
 
+    login_user(session_user, remember=form.remember.data)
+    session[session_user.uid] = session_user
+    return redirect(url_for('dashboard'))
 
 @auth_blueprint.route('/signup', methods=['GET', 'POST'])
 def signup():
