@@ -1,0 +1,102 @@
+{% extends "base.html" %}
+
+{% block title %}
+Products Data
+{% endblock %}
+
+{% block styles %}
+    {{super()}}
+    <link rel="stylesheet" href="{{url_for('.static', filename='data.css')}}">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css">
+{% endblock %}
+
+{% block scripts %}
+    {{super()}}
+{% endblock %}
+
+{% block content %}
+
+<div id="form_wrapper" class="container d-flex align-items-center justify-content-center flex-column col-md-12 ">
+    <div class="row mb-3 col-md-12 text-center justify-content-center">
+        <hr class="col-md-11"/>
+        <h4>Products for you to review:</h4>
+        <button type="button" id="btn_ajaxData" class="col-md-3 mb-1 btn btn-primary">Refresh Data</button>
+        <hr class="col-md-11"/>
+    </div>
+    <table id="products" class="table table-striped" >
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Title</th>
+                <th>Description</th>
+                <th>Price</th>
+            </tr>
+        </thead>
+    </table>
+
+</div> <!-- /container -->
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        disableForm()
+        loadDataAjax()
+
+        //-----------------------------------------------------------
+        function loadDataAjax() {
+            console.log( "loadDataAjax called." );
+            $('#products').DataTable({
+                dom: 'Bfrtip',
+                buttons: [
+                    {extend: 'copy'},
+                    'csv', 'excel', 'pdf', 'print'
+                ],
+                initComplete: function( settings, json ) {
+                    enableForm();
+                },
+                ajax: {
+                  url: "http://127.0.0.1:5000/data/products_api",
+                  method: 'GET',
+                  dataSrc: function (d) {return d}
+                },
+                destroy: true,
+                columns: [
+                        { 'data': 'id' },
+                        { 'data': 'title' },
+                        { 'data': 'description' },
+                        { 'data': 'price' }
+                    ]
+            });
+            $('#products_wrapper').addClass('col-md-12 border border-secondary rounded p-3');
+        }
+
+        //-----------------------------------------------------------
+        function disableForm() {
+            console.log( "disableForm called." );
+            $('button').prop('disabled', 'disabled');
+            $('#form_wrapper :input').prop('disabled', true);
+            $('#form_wrapper select').prop('disabled', true);
+            $('#form_wrapper :submit').prop('disabled', true);
+            //$('#form_wrapper a').removeAttr('href');
+        }
+
+        //-----------------------------------------------------------
+        function enableForm() {
+            console.log( "enableForm called." );
+            $('#form_wrapper :input').prop('disabled', false);
+            $('#form_wrapper select').prop('disabled', false);
+            $('#form_wrapper :submit').prop('disabled', false);
+            //$('#form_wrapper a').removeAttr('href');
+        }
+
+        //-----------------------------------------------------------
+        $( "#btn_ajaxData" ).on( "click", function() {
+            disableForm();
+            loadDataAjax();
+            //enableForm();
+        } );
+
+    });
+
+</script>
+
+{% endblock %}
