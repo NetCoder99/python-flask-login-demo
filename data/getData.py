@@ -8,14 +8,16 @@ getData_blueprint = Blueprint('getData_blueprint',__name__,template_folder='temp
 
 @getData_blueprint.route('/products_api', methods=['GET'])
 def products_api():
+    print('products_api - started')
     ## http://127.0.0.1:5000/data/products
     absolute_path = os.path.dirname(__file__)
     full_path     = os.path.join(absolute_path, "products.json")
 
-    sleep(2)
+    sleep(3)
 
     with open(full_path) as products_file:
         json_data = json.load(products_file)
+        print('products_api - returned')
         return json_data['products']
 
 @getData_blueprint.route('/products', methods=['GET'])
