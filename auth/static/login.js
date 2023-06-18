@@ -1,6 +1,55 @@
 console.log("Login document is ready");
 
+$("form").submit(function (event) {
+    console.log("Form was submitted");
+    disableForm();
+    var formData = {
+      username: $("#username").val().value,
+      password: $("#password").val().value,
+    };
+    var formData2 = {
+      username: username.value,
+      password: password.value,
+    };
+
+    console.log("username:" + username.value)
+    console.log("password:" + password.value)
+
+    $.ajax({
+        type: "POST",
+        url: "http://127.0.0.1:5000/auth/login_api",
+        data: formData2,
+        contentType: "application/json",
+        encode: true,
+    }).done(function (data) {
+        enableForm();
+        displayResult(data);
+        console.log(data);
+    });
+
+    event.preventDefault();
+});
 //-----------------------------------------------------------
-$( "#btn_login" ).on( "click", function() {
-    console.log("Login button was clicked");
-} );
+function displayResult(data) {
+    console.log( "displayResult called." );
+    $(".flashes").html(data);
+}
+
+//-----------------------------------------------------------
+function disableForm() {
+    console.log( "disableForm called." );
+    $("#btn_login").html("Processing...");
+    $('button').prop('disabled', 'disabled');
+    $('#form_wrapper :input').prop('disabled', true);
+    $('#form_wrapper select').prop('disabled', true);
+    $('#form_wrapper :submit').prop('disabled', true);
+}
+
+//-----------------------------------------------------------
+function enableForm() {
+    console.log( "enableForm called." );
+    $("#btn_login").html("Sign in");
+    $('#form_wrapper :input').prop('disabled', false);
+    $('#form_wrapper select').prop('disabled', false);
+    $('#form_wrapper :submit').prop('disabled', false);
+}

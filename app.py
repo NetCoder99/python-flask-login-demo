@@ -38,9 +38,9 @@ def load_user(user_id):
 def index():
     return render_template('index.html')
 
-@app.route('/login')
+@app.route('/login_ajax')
 def login_reroute():
-    return redirect("/auth/login")
+    return redirect("/auth/login_ajax")
 
 @app.route('/dashboard')
 @login_required
