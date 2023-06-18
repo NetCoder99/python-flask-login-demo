@@ -4,21 +4,15 @@ $("form").submit(function (event) {
     console.log("Form was submitted");
     disableForm();
     var formData = {
-      username: $("#username").val().value,
-      password: $("#password").val().value,
+      'username': username.value,
+      'password': password.value,
     };
-    var formData2 = {
-      username: username.value,
-      password: password.value,
-    };
-
-    console.log("username:" + username.value)
-    console.log("password:" + password.value)
+    console.log("formData:" + formData);
 
     $.ajax({
         type: "POST",
         url: "http://127.0.0.1:5000/auth/login_api",
-        data: formData2,
+        data: JSON.stringify(formData),
         contentType: "application/json",
         encode: true,
     }).done(function (data) {

@@ -47,15 +47,24 @@ def login_ajax():
 @auth_blueprint.route('/login_api', methods=['POST'])
 def login_api():
     print('login_api - started')
-    sleep(3)
+    sleep(1)
     try:
-        login_data = str(request.data)
+        login_data = json.loads(request.data)
+        user_name = login_data['username']
+        pass_word = login_data['password']
+        if not user_name or not pass_word:
+            return "Please enter credentials."
+
+        valid, session_user = CheckUserCreds(user_name, pass_word)
+        if not valid:
+            return "Invalid credentials."
+
     except Exception as ex:
-        print(f'Error: {ex.__str__()}')
+        return f'Error: {ex.__str__()}'
 
     rtn_value = "login succeeded"
     print('login_api - finished')
-    return json.dumps(rtn_value)
+    return rtn_value
 
 @auth_blueprint.route('/signup', methods=['GET', 'POST'])
 def signup():
