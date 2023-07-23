@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block title %}
+Products Data
+{% endblock %}
+
+{% block styles %}
+    {{super()}}
+    <link rel="stylesheet" href="static/data.css">
+{% endblock %}
+
+{% block scripts %}
+    {{super()}}
+{% endblock %}
+
+{% block content %}
+
+<div id="form_wrapper" class="container d-flex align-items-center justify-content-center flex-column col-md-12 ">
+    <div class="row mb-3 col-md-12 text-center justify-content-center">
+        <hr class="col-md-11"/>
+        <h4>Products for you to review:</h4>
+        <button type="button" id="btn_ajaxData" class="col-md-3 mb-1 btn btn-primary">Refresh Data</button>
+        <hr class="col-md-11"/>
+    </div>
+    <table id="products" class="table table-striped" >
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Title</th>
+                <th>Description</th>
+                <th>Price</th>
+            </tr>
+        </thead>
+    </table>
+
+</div> <!-- /container -->
+
+<script type="text/javascript" src="static/products.js"></script>
+
+{% endblock %}

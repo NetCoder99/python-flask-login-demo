@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block title %}
+Pandas Demo Data
+{% endblock %}
+
+{% block styles %}
+    {{super()}}
+    <link rel="stylesheet" href="static/data.css">
+{% endblock %}
+
+{% block scripts %}
+    {{super()}}
+{% endblock %}
+
+{% block content %}
+<div id="form_wrapper" class="container d-flex align-items-center justify-content-center flex-column col-md-12 ">
+    <div class="row mb-3 col-md-12 text-center justify-content-center">
+        <hr class="col-sm-9"/>
+        <h4>Pandas data for you to review:</h4>
+        <hr class="col-sm-9"/>
+    </div>
+    {% for table in tables %}
+        {{titles[loop.index]}}
+        {{ table|safe }}
+    {% endfor %}
+
+</div> <!-- /container -->
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#example').DataTable({
+            dom: 'Bfrtip',
+            buttons: [
+                'csv', 'excel', 'pdf', 'print'
+            ]
+         });
+        $('#example_wrapper').addClass('col-md-12 border border-secondary rounded p-3');
+    });
+</script>
+
+{% endblock %}
