@@ -13,9 +13,7 @@ def products_api():
     ## http://127.0.0.1:5000/data/products
     absolute_path = os.path.dirname(__file__)
     full_path     = os.path.join(absolute_path, "products.json")
-
-    sleep(3)
-
+    sleep(1)
     with open(full_path) as products_file:
         json_data = json.load(products_file)
         print('products_api - returned')

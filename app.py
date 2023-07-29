@@ -1,9 +1,11 @@
-from flask import Flask, render_template, redirect, url_for, flash, session
+from flask import Flask, render_template, redirect, request, url_for, flash, session
 from flask_login import LoginManager, login_required, logout_user, current_user
 from flask_session import Session
 
-from auth.auth import auth_blueprint
-from data.getData import getData_blueprint
+from auth.auth      import auth_blueprint
+from data.getData   import getData_blueprint
+from tabs.tabsProcs import getTabs_blueprint
+from flask_cors     import CORS
 from github_procs.github_api import gitapi_blueprint
 
 from setup import db
@@ -32,9 +34,12 @@ app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_TYPE"] = "filesystem"
 Session(app)
 
-app.register_blueprint(auth_blueprint, url_prefix='/auth')
+app.register_blueprint(auth_blueprint,    url_prefix='/auth')
 app.register_blueprint(getData_blueprint, url_prefix='/data')
-app.register_blueprint(gitapi_blueprint, url_prefix='/git')
+app.register_blueprint(gitapi_blueprint,  url_prefix='/git')
+app.register_blueprint(getTabs_blueprint, url_prefix='/tabs')
+
+CORS(app)
 
 with app.app_context():
     db.init_app(app)
@@ -50,6 +55,10 @@ login_manager.login_view = 'login_reroute'
 def load_user(user_id):
     tmp = session.get(user_id)
     return tmp
+
+@app.route("/favicon.ico")
+def favicon():
+    return ''
 
 @app.route('/')
 @app.route('/home')
@@ -76,8 +85,18 @@ def logout():
 
 @app.errorhandler(404)
 def page_not_found(e):
-    app.logger.error(f"page_not_found:{e}")
-    return render_template("error.html",message="Page not found")
+    missing_url = None
+    try:
+        if request is not None:
+            missing_url = request.url
+    except Exception as ex:
+        print(f'exception:{ex}')
+
+    app.logger.error(f"page_not_found:{e}\n{missing_url}")
+    if missing_url is None:
+        return render_template("error.html",message="Page not found")
+    else:
+        return render_template("error.html",message="Page not found", original_message=missing_url)
 
 @app.errorhandler(500)
 def server_error(e):

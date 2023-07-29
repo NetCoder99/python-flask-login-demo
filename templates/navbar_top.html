@@ -12,10 +12,15 @@
                     <a class="nav-link" href="{{ url_for('getData_blueprint.products') }}">Products</a>
                 </li>
                 <li class="nav-item active">
-                    <a class="nav-link" href="{{ url_for('getData_blueprint.products_ajax') }}">Products Ajax</a>
+                    <!-- <a class="nav-link" href="{{ url_for('getData_blueprint.products_ajax') }}">Products Ajax</a> -->
+                    <a class="nav-link" href="javascript:loadProductsAjaxPage()">Products Ajax</a>
                 </li>
                 <li class="nav-item active">
-                    <a class="nav-link" href="{{ url_for('getData_blueprint.pandas_demo1') }}">Pandas Demo 1</a>
+                    <!-- <a class="nav-link" href="{{ url_for('getData_blueprint.pandas_demo1') }}">Pandas</a> -->
+                    <a class="nav-link" href="javascript:loadPandasHTML()">Pandas</a>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link" href="javascript:loadTabsMain()">Tabs</a>
                 </li>
             </ul>
         </div>
